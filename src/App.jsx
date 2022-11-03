@@ -38,11 +38,11 @@ console.log(decodeToken);
   {
 if(localStorage.getItem("userToken")==null)
 {
-return <Navigate to="/register"/>
+return <Navigate to="/login"/>
 }
 else
 {
-return props.children
+return props.children;
 }
   }
   return (
@@ -50,12 +50,12 @@ return props.children
    <Navbar userData={userData} logout={logout}/>
    <div className="container">
    <Routes>
-   <Route path='/' element={<Register/>}></Route>
+   <Route path='/' element={<ProtectedRoute><Home/></ProtectedRoute>}></Route>
       <Route path='home' element={<ProtectedRoute>{<Home/>}</ProtectedRoute>}></Route>
       <Route path='movies' element={<ProtectedRoute><Movies/></ProtectedRoute>}></Route>
-      <Route path='login' element={<ProtectedRoute><Login saveUserData={saveUserData}/></ProtectedRoute>}></Route>
+      <Route path='login' element={<Login saveUserData={saveUserData}/>}></Route>
       <Route path='tvshows' element={<ProtectedRoute> <Tvshows/></ProtectedRoute>}></Route>
-      <Route path='register' element={<ProtectedRoute><Register/></ProtectedRoute>}></Route>
+      <Route path='register' element={<Register/>}></Route>
       <Route path='people' element={<ProtectedRoute><People/></ProtectedRoute>}></Route>
       <Route path='MoviesDetails' element={<ProtectedRoute><MoviesDetails/></ProtectedRoute>}></Route>
       <Route path='TvShowsDetails' element={<ProtectedRoute><TvShowsDetails/></ProtectedRoute>}></Route>

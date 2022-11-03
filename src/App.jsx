@@ -5,13 +5,13 @@ import Register from './Components/Register/Register';
 import Tvshows from './Components/Tvshows/Tvshows';
 import People from './Components/People/People';
 import Movies from "./Components/Movies/Movies"
-import { Routes,Route, useNavigate } from 'react-router-dom';
 import MoviesDetails from './Components/MoviesDetails/MoviesDetails';
 import Notfound from './Components/Notfound/Notfound';
 import PeopleDetails from './Components/PeopleDetails/PeopleDetails';
 import TvShowsDetails from './Components/TvShowsDetails/TvShowsDetails';
 import jwtDecode from 'jwt-decode';
 import { useState,useEffect } from 'react';
+import { Routes,Route, useNavigate,Navigate } from 'react-router-dom';
 function App() {
   const [userData, setUserData] = useState(null)
   let navigate=useNavigate()
@@ -34,22 +34,32 @@ console.log(decodeToken);
       saveUserData()
     }
   }, [])
-  
+  function ProtectedRoute(props)
+  {
+if(localStorage.getItem("userToken")==null)
+{
+return <Navigate to="/register"/>
+}
+else
+{
+return props.children
+}
+  }
   return (
     <>
    <Navbar userData={userData} logout={logout}/>
    <div className="container">
    <Routes>
    <Route path='/' element={<Register/>}></Route>
-      <Route path='home' element={<Home/>}></Route>
-      <Route path='movies' element={<Movies/>}></Route>
-      <Route path='login' element={<Login saveUserData={saveUserData}/>}></Route>
-      <Route path='tvshows' element={ <Tvshows/>}></Route>
-      <Route path='register' element={ <Register/>}></Route>
-      <Route path='people' element={<People/>}></Route>
-      <Route path='MoviesDetails' element={<MoviesDetails/>}></Route>
-      <Route path='TvShowsDetails' element={<TvShowsDetails/>}></Route>
-      <Route path='PeopleDetails' element={<PeopleDetails/>}></Route>
+      <Route path='home' element={<ProtectedRoute>{<Home/>}</ProtectedRoute>}></Route>
+      <Route path='movies' element={<ProtectedRoute><Movies/></ProtectedRoute>}></Route>
+      <Route path='login' element={<ProtectedRoute><Login saveUserData={saveUserData}/></ProtectedRoute>}></Route>
+      <Route path='tvshows' element={<ProtectedRoute> <Tvshows/></ProtectedRoute>}></Route>
+      <Route path='register' element={<ProtectedRoute><Register/></ProtectedRoute>}></Route>
+      <Route path='people' element={<ProtectedRoute><People/></ProtectedRoute>}></Route>
+      <Route path='MoviesDetails' element={<ProtectedRoute><MoviesDetails/></ProtectedRoute>}></Route>
+      <Route path='TvShowsDetails' element={<ProtectedRoute><TvShowsDetails/></ProtectedRoute>}></Route>
+      <Route path='PeopleDetails' element={<ProtectedRoute><PeopleDetails/></ProtectedRoute>}></Route>
       <Route path="*" element={<Notfound/>}></Route>
     </Routes>
    </div>
